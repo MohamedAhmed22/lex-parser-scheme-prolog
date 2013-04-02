@@ -1,0 +1,23 @@
+MAIN PROGRAM (Java):
+
+The Java program is simply a driver that provides a centralized way to access the features of the scanner and parser.  There is a textbox in which users can put it in code that is described by Programming Language Programatics, to do calculations.  All a user needs to run this is an installation of Racket (at least for command line utilities), an installation of SWI-Prolog and Java.  As this is just a scanner and parser, it doesn't calculate actual numbers, it only validates whether the language is correct or not.  All in all, the functions of the program are as follows:
+
+1. Allow user to write code based on calculator language in a textbox
+2. Scan for lexical errors, then load accepted tokens into memory.
+3. Parse the language for syntax errors, let user know if any errors exist.
+
+The program currently has the sample program from the textbook loaded in by default.  By pressing Scan, you create tokens with which it can parse the language. 
+
+SCANNER/LEXER (Racket):
+
+For building the Lexer, the idea of taking small functions and composing more and more complicated functions was taken into account.  One example is the tokenize function which takes a list of char objects and creates a list of lists where each list is a token.  This makes use of the build-token function which simply makes a flat list of tokens until it reaches a whitespace.  Also, regular expressions were utilized for determining which type each token is.  For example, a number is really any digit in [0-9] followed by a possible decimal point and possibly more [0-9] digits.
+
+Personally, this was a really fun learning experience looking at development in a functional language.  It helps to see the different ways that a problem can be approached and seeing the build-up of different functions as I went along was really helpful.  Clearly, this isn't the most optimized or succinct code, but it does work well.
+
+PARSER (Prolog, written by Joel Davis):
+
+The decision to use prolog as the language of choice for the project's parser was made primarily due to the built-in tools the language has to facilitate such an application.  Prolog uses the definite clause grammars, or DCG's, along with the technique of difference lists, to greatly simplify the building up of a parser.  Definite clause grammars provide an easy way of specifying the rules in a Context Free Grammar, such as the grammar for the calculator language used in the project.  They allow more difficult rules, such as stmt_list(A,C):=stmt(A,B),stmt_list(B,C), to be written as stmt_list-->stmt,stmt_list.  Prolog will automatically translate notation using DCG's into their basic components.  This allows a list of grammar rules to be written in prolog in much the same way as they are configured on paper, as seen in the program below.  
+
+The technique of using difference lists in prolog basically breaks the stream of tokens that are to be parsed into two lists: one containing token stream, and the other being an empty list.  Prolog then attempts to "consume" or match the token stream list to the stated rules.  If it can do so, and leaves the list matching the second list, i.e. empty, then it returns true.  Otherwise it returns false.  Again, this is another convention built-in to prolog that simplifies the parsing process. 
+
+Personally, researching how to construct a parser in prolog really showed me the intricacies that exist in the language.  It was interesting to explore the various ways of solving the problem, and to see how the language had been developed to provide a simplified way of doing so.  Although this is obviously not the most optimized code, it was also interesting to note how succinct and compact the code actually was in prolog, as compared, perhaps, to parsers in other languages.  
